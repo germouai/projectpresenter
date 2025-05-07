@@ -1,4 +1,4 @@
-﻿namespace TPI_ProjectPresenter.Models
+﻿namespace TPI_ProjectPresenter.Models.Projects
 {
     public class ProjectEntity
     {
@@ -6,6 +6,6 @@
         public string ProjectName { get; set; }
         public string ProjectDescroption { get; set; }
 
-        List<ProjectTab> _Tabs;
+        List<ProjectTab>? _Tabs;
     }
 }

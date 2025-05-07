@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TPI_ProjectPresenter.Models;
+using TPI_ProjectPresenter.Models.ProjectContent;
 
 namespace TPI_ProjectPresenter.Controllers
 {
@@ -15,7 +16,12 @@ namespace TPI_ProjectPresenter.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var tst = new ContentItemTextOnly("TextyText from ContentItem");
+            var sectiontest = new ContentSection();
+            sectiontest.SectionName = "Section Title Test";
+            sectiontest.SectionTooltip = "I really hope this works";
+            sectiontest.AddContent(tst);
+            return View(sectiontest);
         }
 
         public IActionResult Privacy()

@@ -1,4 +1,4 @@
-﻿namespace TPI_ProjectPresenter.Models
+﻿namespace TPI_ProjectPresenter.Models.ProjectContent
 {
     public class ContentItemSingleImage : ContentItem
     {

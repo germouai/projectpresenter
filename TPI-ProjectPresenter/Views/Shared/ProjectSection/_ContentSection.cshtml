@@ -1,0 +1,9 @@
+﻿@model TPI_ProjectPresenter.Models.ProjectContent.ContentSection
+
+<div class="container-md">
+	<div class="col-12">
+		<h1>@Model.SectionName</h1>
+		<p>@Model.SectionTooltip</p>
+	</div>
+	<partial name="ProjectContent/_TextOnly", model="@Model.GetFirstContent().ItemText" />
+</div>
