@@ -21,6 +21,12 @@ namespace TPI_ProjectPresenter.Controllers
             sectiontest.SectionName = "Section Title Test";
             sectiontest.SectionTooltip = "I really hope this works";
             sectiontest.AddContent(tst);
+
+            var imgtest = new ContentItemSingleImage();
+            imgtest.ImageRef = "RoadmapTP.png";
+
+            sectiontest.AddContent(imgtest);
+
             return View(sectiontest);
         }
 

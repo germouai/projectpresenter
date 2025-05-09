@@ -19,6 +19,13 @@
 
             return content != null ? content : new ContentItemTextOnly("No hay elementos");
         }
+
+        public List<ContentItem> GetContentItems()
+        {
+            return _ContentItems;
+
+        }
+
         public void AddContent(ContentItem content)
         {
             _ContentItems.Add(content);

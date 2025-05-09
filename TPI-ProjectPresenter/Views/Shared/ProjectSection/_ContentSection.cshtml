@@ -1,9 +1,14 @@
 ﻿@model TPI_ProjectPresenter.Models.ProjectContent.ContentSection
 
 <div class="container-md">
-	<div class="col-12">
-		<h1>@Model.SectionName</h1>
-		<p>@Model.SectionTooltip</p>
+	<div class="col-12 ContentSectionContainer">
+		<h2>@Model.SectionName</h2>
+		<p class="SectionTooltip">@Model.SectionTooltip</p>
+		@foreach (var item in @Model.GetContentItems())
+		{
+			<partial name="ProjectContent/_@item.ItemType" , model="@item" />
+		}
+
+		@* <partial name="ProjectContent/_TextOnly" , model="@Model.GetFirstContent().ItemText" /> *@
 	</div>
-	<partial name="ProjectContent/_TextOnly", model="@Model.GetFirstContent().ItemText" />
 </div>

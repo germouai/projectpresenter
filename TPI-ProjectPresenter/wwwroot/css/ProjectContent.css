@@ -1,0 +1,18 @@
+﻿.ContentSectionContainer
+{
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 2px 2px 2px 2px gray;
+    padding-left: 8px;
+}
+
+.ContentItem
+{
+
+}
+
+.SectionTooltip
+{
+    font-style: italic;
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+}
