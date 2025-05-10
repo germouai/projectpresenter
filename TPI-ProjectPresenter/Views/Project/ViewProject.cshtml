@@ -1,0 +1,19 @@
+﻿@model TPI_ProjectPresenter.Models.Projects.ProjectEntity
+
+@{
+    ViewData["Title"] = "ViewProject";
+}
+
+<div class="container-lg " >
+    @*Vista parcial Encabezado de Proyecto*@
+    <partial name="ProjectSection/_ProjectHeader", model="@Model.Header" />
+
+    @*Vista parcial Menú Pestañas del Proyecto*@
+    <partial name="ProjectSection/_ProjectTabs", model="@Model.GetFirstTab()" />
+
+    @*Vista parcial Contenido de la Pestaña*@
+    <partial name="ProjectSection/_ContentSection" , model="@Model.GetFirstTab().GetFirstSection()" />
+</div> 
+
+@* <partial name="ProjectSection/_ContentSection" , model="@Model"  />*@
+

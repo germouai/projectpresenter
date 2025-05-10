@@ -16,18 +16,7 @@ namespace TPI_ProjectPresenter.Controllers
 
         public IActionResult Index()
         {
-            var tst = new ContentItemTextOnly("TextyText from ContentItem");
-            var sectiontest = new ContentSection();
-            sectiontest.SectionName = "Section Title Test";
-            sectiontest.SectionTooltip = "I really hope this works";
-            sectiontest.AddContent(tst);
-
-            var imgtest = new ContentItemSingleImage();
-            imgtest.ImageRef = "RoadmapTP.png";
-
-            sectiontest.AddContent(imgtest);
-
-            return View(sectiontest);
+            return View();
         }
 
         public IActionResult Privacy()

@@ -1,0 +1,10 @@
+﻿@model TPI_ProjectPresenter.Models.Projects.ProjectEntity.ProjectHeader
+
+<div class="row">
+	<div class="col-12 ProjectTitle"><h1>@Model.ProjectName</h1></div>
+	<div class="col-9">
+		<div class="SectionTooltip">@Model.ProjectTooltip</div>
+		<div class="ProjectDescription">@Model.ProjectDescription</div>
+	</div>
+	<div class="col-3"><img class="img-fluid float-end" src="/img/@Model.ProjectImgRef"/></div>
+</div>
