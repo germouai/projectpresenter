@@ -1,0 +1,13 @@
+﻿@model TPI_ProjectPresenter.Models.Projects.ProjectEntity
+
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<div class="container-lg"
+    <h1 class="text-center">ProjectList</h1>
+    <div class="container ProjectList">
+        <partial name="ProjectList/_ProjectListItem", model="@Model.Header" />
+    </div>
+
+</div>

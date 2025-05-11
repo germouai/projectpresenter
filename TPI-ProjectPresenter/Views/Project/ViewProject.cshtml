@@ -4,7 +4,7 @@
     ViewData["Title"] = "ViewProject";
 }
 
-<div class="container-lg " >
+<div class="container-lg" >
     @*Vista parcial Encabezado de Proyecto*@
     <partial name="ProjectSection/_ProjectHeader", model="@Model.Header" />
 
@@ -14,6 +14,4 @@
     @*Vista parcial Contenido de la Pestaña*@
     <partial name="ProjectSection/_ContentSection" , model="@Model.GetFirstTab().GetFirstSection()" />
 </div> 
-
-@* <partial name="ProjectSection/_ContentSection" , model="@Model"  />*@
 

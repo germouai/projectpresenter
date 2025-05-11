@@ -1,0 +1,16 @@
+﻿@model TPI_ProjectPresenter.Models.Projects.ProjectEntity.ProjectHeader
+
+<a class="nav-link text-dark" asp-area="" asp-controller="Project" asp-action="ViewProject">
+<div class="row">
+	<ul class="list-group">
+		<li class="list-group-item">
+			<div class="col-1"><img class="img-fluid float-start" src="/img/@Model.ProjectImgRef" /></div>
+			<div class="col-10">
+				<h4 class="row ProjectListTitle">@Model.ProjectName</h4>
+				<div class="row ProjectListDescription">@Model.ProjectDescription</div>
+			</div>
+			<div class="col-1 float-end"><i class="bi bi-arrow-up-right-square-fill float-end"></i></div>
+		</li>	
+	</ul>
+</div>
+</a>
