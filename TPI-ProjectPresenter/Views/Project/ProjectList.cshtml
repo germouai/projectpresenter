@@ -1,13 +1,16 @@
-﻿@model TPI_ProjectPresenter.Models.Projects.ProjectEntity
+﻿@model List<TPI_ProjectPresenter.Models.Projects.ProjectEntity.ProjectHeader>
 
 @{
     ViewData["Title"] = "Projects";
 }
 
-<div class="container-lg"
-    <h1 class="text-center">ProjectList</h1>
+<div class="container-lg">
+    <div  class="text-center"><h1>ProjectList</h1></div>
     <div class="container ProjectList">
-        <partial name="ProjectList/_ProjectListItem", model="@Model.Header" />
+        @foreach (var header in @Model)
+        {
+            <partial name="ProjectList/_ProjectListItem" , model="header" />
+        }
     </div>
 
 </div>
