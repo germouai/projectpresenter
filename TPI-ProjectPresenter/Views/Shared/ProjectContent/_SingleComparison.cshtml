@@ -1,0 +1,23 @@
+﻿@model TPI_ProjectPresenter.Models.ProjectContent.ContentItemSingleComparison
+
+<div class="col-12">@Model.ItemText</div>
+<div class="col-md-6 col-sm-12 float-start">
+	<h6>@Model.LeftItem.ItemTitle</h6>
+	<p>@Model.LeftItem.ItemDetail</p>
+	<ul>
+		@foreach (string info in @Model.LeftItem.ItemizedInfo)
+		{
+			<li>@info</li>
+		}
+	</ul>
+</div>
+<div class="col-md-6 col-sm-12 float-end">
+	<h6>@Model.RightItem.ItemTitle</h6>
+	<p>@Model.RightItem.ItemDetail</p>
+	<ul>
+		@foreach (string info in @Model.RightItem.ItemizedInfo)
+		{
+			<li>@info</li>
+		}
+	</ul>
+</div>

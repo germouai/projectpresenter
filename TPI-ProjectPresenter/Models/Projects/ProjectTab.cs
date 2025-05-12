@@ -22,5 +22,10 @@ namespace TPI_ProjectPresenter.Models.Projects
         {
             return _Sections.FirstOrDefault();
         }
+
+        public List<ContentSection> GetSections()
+        {
+            return _Sections;
+        }
     }
 }

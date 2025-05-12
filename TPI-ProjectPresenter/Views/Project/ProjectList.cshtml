@@ -7,10 +7,16 @@
 <div class="container-lg">
     <div  class="text-center"><h1>ProjectList</h1></div>
     <div class="container ProjectList">
-        @foreach (var header in @Model)
-        {
-            <partial name="ProjectList/_ProjectListItem" , model="header" />
-        }
+        <ul class="list-group">
+                @foreach (var header in @Model)
+                {
+                    <li class="list-group-item">
+                        <div class="row">    
+                            <partial name="ProjectList/_ProjectListItem" , model="header" />
+                        </div>
+                    </li>
+                }
+        </ul>
     </div>
 
 </div>

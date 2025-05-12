@@ -22,5 +22,14 @@
         {
             ItemizedInfo = itemizedInfo;
         }
+
+        public void SetInfoFromArray(string[] infoArray)
+        {
+            ItemizedInfo.Clear();
+            foreach (var item in infoArray)
+            {
+                ItemizedInfo.Add(item);
+            }
+        }
     }
 }

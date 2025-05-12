@@ -13,6 +13,10 @@ namespace TPI_ProjectPresenter.Controllers
             sectiontest.SectionName = "Section Title Test";
             sectiontest.SectionTooltip = "I really hope this works";
 
+            var sectiontest2 = new ContentSection();
+            sectiontest2.SectionName = "Second Section";
+            sectiontest2.SectionTooltip = "Just testing the iteration between sections";
+
             /*Objeto Contenido de sólo texto*/
             var tst = new ContentItemTextOnly();
             tst.ItemText = "Tortor Pharetra Rhoncus Per Faucibus Fames Pellentesque Metus Porttitor Quam At Integer Laoreet Sem Mauris Curabitur Sem Nulla Enim Himenaeos Nec Ante Molestie Velit Taciti Quis Proin Nisl Interdum Aenean Elementum Vitae Tristique Ligula Phasellus Aliquet Convallis Non Vestibulum Magna Vel Aptent Lobortis Nisi Aliquam Feugiat Mauris Imperdiet Non Arcu Placerat Netus Quis Consectetur Habitasse Eget Hac Morbi Eros Ut Metus Morbi Sodales Fermentum Iaculis Potenti Habitasse A Tortor Tempor Porttitor Bibendum Feugiat Odio Nisi Dictumst";
@@ -28,6 +32,17 @@ namespace TPI_ProjectPresenter.Controllers
 
             sectiontest.AddContent(imgtest);
 
+            /*Objeto Contenido Comparación Simple*/
+            var item1 = new ComparisonItem("Old Method", "Tech we used before");
+            item1.SetInfoFromArray(["Older", "Slower", "Manual"]);
+
+            var item2 = new ComparisonItem("New Method", "New tech");
+            item2.SetInfoFromArray(["Newer", "Faster", "Automated"]);
+            
+            var comparetest = new ContentItemSingleComparison(item1, item2);
+
+            sectiontest2.AddContent(comparetest);
+
             /*Objetos "Entitad de proyecto" y "Pestaña de Proyecto"*/
             var projectest = new ProjectEntity();
 
@@ -42,6 +57,7 @@ namespace TPI_ProjectPresenter.Controllers
             var tabtest = new ProjectTab();
             tabtest.TabName = "Basic Info";
             tabtest.AddSection(sectiontest);
+            tabtest.AddSection(sectiontest2);
 
             projectest.AddTab(tabtest);
 

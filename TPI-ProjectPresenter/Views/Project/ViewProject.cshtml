@@ -18,6 +18,11 @@
     <partial name="ProjectSection/_ProjectTabs", model="@Model.GetFirstTab()" />
 
     @*Vista parcial Contenido de la Pestaña*@
-    <partial name="ProjectSection/_ContentSection" , model="@Model.GetFirstTab().GetFirstSection()" />
+    @foreach (var section in @Model.GetFirstTab().GetSections())
+    {
+        <partial name="ProjectSection/_ContentSection" , model="section" />
+        <br />
+    }
+    @*<partial name="ProjectSection/_ContentSection" , model="@Model.GetFirstTab().GetFirstSection()" />*@
 </div> 
 
