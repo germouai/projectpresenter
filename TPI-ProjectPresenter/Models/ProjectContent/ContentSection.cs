@@ -2,7 +2,7 @@
 {
     public class ContentSection
     {
-        public int SID { get; private set; }
+        public int SID { get; set; }
         public string SectionName { get; set; }
         public string SectionTooltip { get; set; }
 
@@ -24,6 +24,11 @@
         {
             return _ContentItems;
 
+        }
+
+        public void setContent(List<ContentItem> contentItems)
+        {
+            _ContentItems = contentItems;
         }
 
         public void AddContent(ContentItem content)

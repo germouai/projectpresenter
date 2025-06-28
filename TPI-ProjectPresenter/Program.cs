@@ -1,7 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using TPI_ProjectPresenter.Models;
+using TPI_ProjectPresenter.Models.DAO;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ProjectPresenterPwaContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLConn"))
+    );
 
 var app = builder.Build();
 

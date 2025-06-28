@@ -31,5 +31,14 @@
                 ItemizedInfo.Add(item);
             }
         }
+
+        public void SetInfoFromRowArray(Models.DAO.ComparisonItemInfo[] infoArray)
+        {
+            ItemizedInfo.Clear();
+            foreach (var item in infoArray)
+            {
+                ItemizedInfo.Add(item.Info);
+            }
+        }
     }
 }

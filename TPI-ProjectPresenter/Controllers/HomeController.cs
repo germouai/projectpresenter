@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TPI_ProjectPresenter.Models;
+using TPI_ProjectPresenter.Models.DAO;
 using TPI_ProjectPresenter.Models.ProjectContent;
 
 namespace TPI_ProjectPresenter.Controllers

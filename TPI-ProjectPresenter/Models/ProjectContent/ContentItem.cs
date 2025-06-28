@@ -7,5 +7,11 @@
         public string? ItemText { get; set; }
 
         internal string ItemType;
+
+        public void setItemType(string itemType) 
+        {
+            itemType = itemType.Trim().Substring(11);
+            ItemType = itemType;
+        }
     }
 }

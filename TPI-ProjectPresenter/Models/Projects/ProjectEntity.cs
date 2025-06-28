@@ -13,6 +13,15 @@
             Header = new ProjectHeader();
         }
 
+        public ProjectEntity(int pPID, string pName, string pDescription, string pToolTip, string pImgRef) : this()
+        {
+            PID = pPID;
+            Header.ProjectName = pName;
+            Header.ProjectDescription = pDescription;
+            Header.ProjectTooltip = pToolTip;
+            Header.ProjectImgRef = pImgRef;
+        }
+
         public class ProjectHeader
         {
             public string? ProjectName { get; set; }

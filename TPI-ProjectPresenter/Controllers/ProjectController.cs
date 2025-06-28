@@ -1,85 +1,57 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TPI_ProjectPresenter.Models.DAO;
 using TPI_ProjectPresenter.Models.ProjectContent;
 using TPI_ProjectPresenter.Models.Projects;
+using TPI_ProjectPresenter.DataAdapters;
+using Microsoft.EntityFrameworkCore;
 
 namespace TPI_ProjectPresenter.Controllers
 {
 	public class ProjectController : Controller
 	{
-		public IActionResult ViewProject()
+        private readonly ProjectPresenterPwaContext _DBContext;
+
+        public ProjectController(ProjectPresenterPwaContext dbContext)
+        {
+            _DBContext = dbContext;
+        }
+
+        public IActionResult ViewProject()
 		{
-            /*Objeto Sección de Contenido*/
-            var sectiontest = new ContentSection();
-            sectiontest.SectionName = "Section Title Test";
-            sectiontest.SectionTooltip = "I really hope this works";
+            //Querys que deberian ser suficientes pero no
+            var prj = _DBContext.Projects.Find([1]);
 
-            var sectiontest2 = new ContentSection();
-            sectiontest2.SectionName = "Second Section";
-            sectiontest2.SectionTooltip = "Just testing the iteration between sections";
+            var sect = _DBContext.ProjectTabs.Find([1, 1]);
+            var qry = _DBContext.ContentSections.Where(s => s.Pid == 1 && s.Tid == 1).ToList();
+            var it = _DBContext.ContentItems.Where(i => i.Pid == 1);
+            var itmg = _DBContext.ContentSingleImages.Where(i => i.Pid == 1);
 
-            /*Objeto Contenido de sólo texto*/
-            var tst = new ContentItemTextOnly();
-            tst.ItemText = "Tortor Pharetra Rhoncus Per Faucibus Fames Pellentesque Metus Porttitor Quam At Integer Laoreet Sem Mauris Curabitur Sem Nulla Enim Himenaeos Nec Ante Molestie Velit Taciti Quis Proin Nisl Interdum Aenean Elementum Vitae Tristique Ligula Phasellus Aliquet Convallis Non Vestibulum Magna Vel Aptent Lobortis Nisi Aliquam Feugiat Mauris Imperdiet Non Arcu Placerat Netus Quis Consectetur Habitasse Eget Hac Morbi Eros Ut Metus Morbi Sodales Fermentum Iaculis Potenti Habitasse A Tortor Tempor Porttitor Bibendum Feugiat Odio Nisi Dictumst";
-            tst.ItemTitle = "TextOnly Item";
-            
-            sectiontest.AddContent(tst);
+            //Querys forzadas para que lea todo
+            var pj = _DBContext.Projects.ToList();
+            var pjt = _DBContext.ProjectTabs.ToList();
+            var ts = _DBContext.ContentSections.ToList();
+            var ci = _DBContext.ContentItems.ToList();
+            var cim = _DBContext.ContentSingleImages.ToList();
+            var csc = _DBContext.ContentSingleComparisons.ToList();
+            var cinf = _DBContext.ComparisonItemInfos.ToList();
 
-            /*Objeto Conenido con Imágen*/
-            var imgtest = new ContentItemSingleImage();
-            imgtest.ItemTitle = "Now an Image";
-            imgtest.ItemText = "Images can also have an introductory text :D";
-            imgtest.ImageRef = "RoadmapTP.png";
+            var prjObj = ProjectDataAdapter.ProjectEntityFromProject(prj);
 
-            sectiontest.AddContent(imgtest);
+            //var qry = _DBContext.ContentSections.FromSql($"select * from ContentSection where PID={1} AND TID={1}").ToList();
 
-            /*Objeto Contenido Comparación Simple*/
-            var item1 = new ComparisonItem("Old Method", "Tech we used before");
-            item1.SetInfoFromArray(["Older", "Slower", "Manual"]);
-
-            var item2 = new ComparisonItem("New Method", "New tech");
-            item2.SetInfoFromArray(["Newer", "Faster", "Automated"]);
-            
-            var comparetest = new ContentItemSingleComparison(item1, item2);
-
-            sectiontest2.AddContent(comparetest);
-
-            /*Objetos "Entitad de proyecto" y "Pestaña de Proyecto"*/
-            var projectest = new ProjectEntity();
-
-            projectest.Header = new ProjectEntity.ProjectHeader() 
-            { 
-                ProjectDescription = "Nulla Per Metus Libero Condimentum Diam Curabitur Turpis Sit Habitasse Magna Lacus Justo Maecenas Interdum Nibh Ornare Urna Habitasse Morbi Quisque Duis Tristique Felis Risus Dolor Leo Nostra Ullamcorper Volutpat Viverra Varius Mattis Vitae Adipiscing Feugiat Platea Praesent Ligula Augue Semper Dolor Ullamcorper Nam Sem Venenatis Morbi Sit Curae Curabitur Curabitur Litora Ut Metus Nisi Imperdiet Sapien Malesuada Rutrum Sollicitudin A Proin Dictum Posuere Ac",
-                ProjectImgRef = "ideas.png", 
-                ProjectName = "Testing the project title", 
-                ProjectTooltip = "This should be a considerably long text but not so much, it's small and in italicz."  
-            };
-
-            var tabtest = new ProjectTab();
-            tabtest.TabName = "Basic Info";
-            tabtest.AddSection(sectiontest);
-            tabtest.AddSection(sectiontest2);
-
-            projectest.AddTab(tabtest);
-
-            return View(projectest);
+            return View(prjObj);
         }
 
         public IActionResult ProjectList()
         {
-			var projectest = new ProjectEntity();
+            List<Models.DAO.Project> lista = _DBContext.Projects.ToList();
+            
+            var objList = ProjectDataAdapter.ProjectRowsToHeaderObjects(lista);
+            
+            /*_DBContext.ProjectTabs.ToList();
+            Models.DAO.Project tst = _DBContext.Projects.FirstOrDefault();*/
 
-			projectest.Header = new ProjectEntity.ProjectHeader()
-			{
-				ProjectDescription = "Nulla Per Metus Libero Condimentum Diam Curabitur Turpis Sit Habitasse Magna Lacus Justo Maecenas Interdum Nibh Ornare Urna Habitasse Morbi Quisque Duis Tristique Felis Risus Dolor Leo Nostra Ullamcorper Volutpat Viverra Varius Mattis Vitae Adipiscing Feugiat Platea Praesent Ligula Augue Semper Dolor Ullamcorper Nam Sem Venenatis Morbi Sit Curae Curabitur Curabitur Litora Ut Metus Nisi Imperdiet Sapien Malesuada Rutrum Sollicitudin A Proin Dictum Posuere Ac",
-				ProjectImgRef = "ideas.png",
-				ProjectName = "Testing the project title",
-				ProjectTooltip = "This should be a considerably long text but not so much, it's small and in italicz."
-			};
-
-            List<ProjectEntity.ProjectHeader> projectlist = new List<ProjectEntity.ProjectHeader>();
-            projectlist.Add(projectest.Header);
-
-			return View(projectlist);
+			return View(objList);
         }
 	}
 }

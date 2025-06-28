@@ -13,6 +13,12 @@ namespace TPI_ProjectPresenter.Models.Projects
             _Sections = new List<ContentSection>();
         }
 
+        public ProjectTab(int pTID, string pTabName) : this()
+        {
+            TID = pTID;
+            TabName = pTabName;
+        }
+
         public void AddSection(ContentSection section)
         {
             _Sections.Add(section);
