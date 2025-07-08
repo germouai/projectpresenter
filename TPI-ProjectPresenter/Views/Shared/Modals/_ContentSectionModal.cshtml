@@ -1,0 +1,39 @@
+﻿<div class="modal fade" id="newSectionModal" tabindex="-1" aria-labelledby="newSectionModalLabel" aria-hidden="true">​
+
+<div class="modal-dialog">​
+
+    <div class="modal-content">​
+
+        <div class="modal-header">​
+
+            <h1 class="modal-title fs-5" id="newSectionModalLabel">New Section Modal</h1>​
+
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>​
+
+        </div>​
+        <form class="form-floating mb-3" asp-controller="Project" asp-action="NewSection">
+            <input type="hidden" name="PID" value="@Model.PID" />
+            <input type="hidden" name="TID" value="0" />
+            <div class="modal-body">​
+                
+                <label class="form-label">Name: </label>
+                <input name="SectionName" class="form-control form-text" type="text"/>
+                <label class="form-label">Description: </label>
+                <textarea name="SectionText" class="form-control form-text" type="text" rows="3"/>
+                
+
+            </div>​
+
+            <div class="modal-footer">​
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>​
+
+                <button type="submit" class="btn btn-primary" >Save</button>​
+                
+            </div>​
+        </form>
+    </div>​
+
+</div>​
+
+</div>

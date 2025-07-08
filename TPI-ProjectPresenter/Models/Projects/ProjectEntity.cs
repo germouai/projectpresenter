@@ -39,5 +39,10 @@
         {
             return _Tabs.FirstOrDefault();
         }
+
+        public List<ProjectTab> GetTabs()
+        {
+            return _Tabs;
+        }
     }
 }

@@ -4,6 +4,30 @@
     ViewData["Title"] = "ViewProject";
 }
 
+@section Scripts
+{
+    <script>
+        const divs = document.querySelectorAll('.contentrow');
+
+        document.addEventListener("DOMContentLoaded", hideDivs(1));
+
+        function hideDivs(tab) {
+
+            divs.forEach(div => 
+            {
+                if (div.id != tab)
+                {
+                    div.style.display = 'none';   
+                }
+                else 
+                {
+                    div.style.display = 'block';   
+                }
+            });
+        }
+    </script>
+}
+
 <div class="container-lg" >
     <div class="alert  alert-success">​
 
@@ -15,14 +39,57 @@
     <partial name="ProjectSection/_ProjectHeader", model="@Model.Header" />
 
     @*Vista parcial Menú Pestañas del Proyecto*@
-    <partial name="ProjectSection/_ProjectTabs", model="@Model.GetFirstTab()" />
+    <div class="row">
+	    <div class="col-12 text-black">
+		    <ul class="nav nav-tabs">
+                @foreach (var tab in Model.GetTabs())
+                {
+                    <partial name="ProjectSection/_ProjectTabs", model="tab" />
+                }
+                <li class="nav-item"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTabModal">​<i class="bi bi-plus-square-fill float-end"></i></button></li>
+            </ul>
+        </div>
+    </div>
 
     @*Vista parcial Contenido de la Pestaña*@
-    @foreach (var section in @Model.GetFirstTab().GetSections())
+    @if (Model.GetFirstTab() != null)
     {
-        <partial name="ProjectSection/_ContentSection" , model="section" />
-        <br />
+        foreach (var tab in Model.GetTabs())
+        {
+            <div class="row contentrow" id="@tab.TID">
+                    @foreach (var section in tab.GetSections())
+                    {
+                        <partial name="ProjectSection/_ContentSection" , model="section" />
+                        <br />
+                    }                    
+                    <div class="col-2 offset-lg-5 offset-sm-3">
+                        <a asp-action="NewSection" asp-controller="Project" asp-route-ppid="@Model.PID" asp-route-ptid="@tab.TID"><button type="button" class="btn btn-primary">​<i class="bi bi-plus-square-fill float-end"></i>New Section</button></a>
+                    </div>
+            </div>
+            
+        }
     }
-    @*<partial name="ProjectSection/_ContentSection" , model="@Model.GetFirstTab().GetFirstSection()" />*@
+
 </div> 
 
+<div class="modal fade" id="newTabModal" tabindex="-1" aria-labelledby="newTabModalLabel" aria-hidden="true">​
+    <div class="modal-dialog">​
+        <div class="modal-content">​
+            <div class="modal-header">​
+                <h1 class="modal-title fs-5" id="exampleModalLabel">New Tab Modal</h1>​
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>​
+            </div>​
+            <form class="form-floating mb-3" asp-controller="Project" asp-action="NewTab">
+                <input type="hidden" name="PID" value="@Model.PID" />
+                <div class="modal-body">​                
+                    <label class="form-label">Name: </label>
+                    <input name="TabName" class="form-control form-text" type="text"/>
+                </div>​
+                <div class="modal-footer">​
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>​
+                    <button type="submit" class="btn btn-primary" >Save</button>​
+                </div>​
+            </form>
+        </div>​
+    </div>​
+</div>

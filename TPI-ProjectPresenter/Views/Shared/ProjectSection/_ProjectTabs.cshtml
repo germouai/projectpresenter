@@ -1,10 +1,7 @@
 ﻿@model TPI_ProjectPresenter.Models.Projects.ProjectTab
 
-<div class="row">
-	<div class="col-12 text-black">
-		<ul class="nav nav-tabs">
-			<li class="nav-item"><a class="nav-link" asp-controller="Project" asp-action="ViewProject">@Model.TabName</a></li>
-			<li class="nav-item"><i class="bi bi-plus-square-fill float-end"></i></li>
-		</ul>
-	</div>
-</div>
+
+@if (Model != null)
+{
+	<li class="nav-item"><a class="nav-link" onclick="hideDivs(@Model.TID)">@Model.TabName</a></li>
+}

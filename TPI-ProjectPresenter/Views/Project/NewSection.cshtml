@@ -1,0 +1,28 @@
+﻿@model TPI_ProjectPresenter.Models.DataTx.NewSectionData;
+
+@{
+    ViewData["Title"] = "NewSection";
+}
+
+<div class="container-lg">
+    <div class="text-center"><h1>New Section</h1></div>
+    <div class="row">
+        <form class="form-floating mb-3" asp-controller="Project" asp-action="NewSection" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="PID" asp-for="PID" value="@Model.PID" />
+            <input type="hidden" name="TID" asp-for="TID" value="@Model.TID" />
+            <input type="hidden" name="section.SID" asp-for="section.SID" value="0" />
+            <div class="col-8 offset-lg-2">
+                <label asp-for="section.SectionName" class="form-label">Name: </label>
+                <input name="section.SectionName" class="form-control form-text" type="text" asp-for="section.SectionName" />
+            </div>
+            <div class="col-8 offset-lg-2">
+                <label asp-for="section.SectionTooltip" class="form-label">Tooltip: </label>
+                <textarea id="SectionToolTip" name="section.SectionTooltip" class="form-control" rows="5" asp-for="section.SectionTooltip" > </textarea>
+            </div>
+            <div class="col-2 offset-lg-8 offset-sm-4 align-content-end">
+                <button class="btn btn-primary" type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
