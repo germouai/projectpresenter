@@ -6,17 +6,67 @@ using TPI_ProjectPresenter.Models.DataTx;
 using TPI_ProjectPresenter.DataAdapters;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace TPI_ProjectPresenter.Controllers
 {
 	public class ProjectController : Controller
 	{
         private readonly ProjectPresenterPwaContext _DBContext;
-
-        public ProjectController(ProjectPresenterPwaContext dbContext)
+        private readonly IWebHostEnvironment webHostEnvironment;
+        public ProjectController(ProjectPresenterPwaContext dbContext, IWebHostEnvironment _webHostEnvironment)
         {
             _DBContext = dbContext;
+            this.webHostEnvironment = _webHostEnvironment;
         }
+
+        public string UploadImage(IFormFile pImgFile)
+        {
+            string fileName = null;
+            if (pImgFile != null)
+            {
+                string uploadDir = Path.Combine(webHostEnvironment.WebRootPath, "img");
+                fileName = Guid.NewGuid().ToString().Substring(0, 15) + "-" + pImgFile.FileName;
+                string filePath = Path.Combine(uploadDir, fileName);
+                using (var filestream = new FileStream(filePath, FileMode.Create))
+                {
+                    pImgFile.CopyTo(filestream);
+                }
+            }
+            return fileName;
+        }
+        
+
+        [HttpGet]
+        public IActionResult NewProject()
+        {
+            var aux = new NewProjectEntityData() { ProjectData = new ProjectEntity() };
+
+
+            return View(aux);
+        }
+
+        [HttpPost]
+        public IActionResult NewProject(NewProjectEntityData np)
+        {
+            var aux = _DBContext.Projects.OrderByDescending(p => p.Pid).ToList();
+
+            if (aux.Count() != 0) { np.ProjectData.PID = aux.FirstOrDefault().Pid + 1; }
+            else { np.ProjectData.PID = 1; }
+
+            string filename = UploadImage(np.ImgFile);
+            np.ProjectData.Header.ProjectImgRef = filename;
+
+            var prow = ProjectDataAdapter.ProjectRowFromObject(np.ProjectData);
+
+            _DBContext.Projects.Add(prow);
+            _DBContext.SaveChanges();
+
+
+            return RedirectToAction("ViewProject", new {ppid = np.ProjectData.PID});
+        }
+
 
         [HttpPost]
         public IActionResult NewTab(string TabName = "", int PID = 0)
@@ -56,7 +106,6 @@ namespace TPI_ProjectPresenter.Controllers
 
             return RedirectToAction("ViewProject", new { ppid =  data.PID });
         }
-
 
 
         [HttpGet]
@@ -100,5 +149,7 @@ namespace TPI_ProjectPresenter.Controllers
 
 			return View(objList);
         }
+
+
 	}
 }

@@ -1,7 +1,22 @@
-﻿namespace TPI_ProjectPresenter.DataAdapters
+﻿using TPI_ProjectPresenter.Models.DataTx;
+
+namespace TPI_ProjectPresenter.DataAdapters
 {
     public abstract class ProjectDataAdapter
     {
+
+        public static Models.DAO.Project ProjectRowFromObject(Models.Projects.ProjectEntity pProjectData)
+        {
+            return new Models.DAO.Project()
+            {
+                Pid = pProjectData.PID,
+                Name = pProjectData.Header.ProjectName,
+                Description = pProjectData.Header.ProjectDescription,
+                Tooltip = pProjectData.Header.ProjectTooltip,
+                ImgRef = pProjectData.Header.ProjectImgRef
+            };
+
+        }
 
         public static List<Models.Projects.ProjectEntity> ProjectRowsToObjects(List<Models.DAO.Project> projectRows)
         {

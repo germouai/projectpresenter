@@ -2,13 +2,14 @@
 {
     public class ProjectEntity
     {
-        public int PID { get; private set; }
+        public int PID { get; set; }
         public ProjectHeader Header { get; set; }
 
         List<ProjectTab>? _Tabs;
 
         public ProjectEntity() 
         {
+            PID = 0;
             _Tabs = new List<ProjectTab>();
             Header = new ProjectHeader();
         }

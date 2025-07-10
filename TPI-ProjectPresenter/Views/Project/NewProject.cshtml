@@ -1,0 +1,34 @@
+﻿@model TPI_ProjectPresenter.Models.DataTx.NewProjectEntityData;
+
+@{
+    ViewData["Title"] = "NewProject";
+}
+
+<div class="container-lg">
+    <div class="text-center"><h1>New Project</h1></div>
+    <div class="row">
+        <form class="form-floating mb-3" asp-controller="Project" asp-action="NewProject" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="ProjectData.PID" asp-for="ProjectData.PID" value="@Model.ProjectData.PID" />
+            <div class="col-8 offset-lg-2">
+                <label asp-for="ProjectData.Header.ProjectName" class="form-label">Name: </label>
+                <input name="ProjectData.Header.ProjectName" class="form-control form-text" type="text" asp-for="ProjectData.Header.ProjectName" />
+            </div>
+            <div class="col-8 offset-lg-2">
+                <label asp-for="ProjectData.Header.ProjectDescription" class="form-label">Project Image: </label>
+                <input name="ImgFile" type="file" class="form-control" asp-for="ImgFile" />
+            </div>
+            <div class="col-8 offset-lg-2">
+                <label asp-for="ProjectData.Header.ProjectDescription" class="form-label">Project Description: </label>
+                <textarea id="ProjectDescription" name="ProjectData.Header.ProjectDescription" class="form-control" rows="5" asp-for="ProjectData.Header.ProjectDescription"> </textarea>
+            </div>
+            <div class="col-8 offset-lg-2">
+                <label asp-for="ProjectData.Header.ProjectTooltip" class="form-label">Project Tooltip: </label>
+                <textarea id="ProjectTooltip" name="ProjectData.Header.ProjectTooltip" class="form-control" rows="5" asp-for="ProjectData.Header.ProjectTooltip"> </textarea>
+            </div>
+            <div class="col-2 offset-lg-8 offset-sm-4 align-content-end">
+                <button class="btn btn-primary" type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+
