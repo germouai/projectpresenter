@@ -124,7 +124,23 @@ namespace TPI_ProjectPresenter.Controllers
             if (aux.Count > 0) { IID = aux.FirstOrDefault().Iid + 1; }
             else { IID = 1; }
 
-
+            if (data.ItemData.ItemType == "SingleImage")
+            {
+                var imgAux = new Models.ProjectContent.ContentItemSingleImage();
+                imgAux.ImageRef = UploadImage(data.ImgFile);
+                imgAux.IID = IID;
+                imgAux.ItemTitle = data.ItemData.ItemTitle;
+                imgAux.ItemText = data.ItemData.ItemText;
+                
+                data.ItemData = imgAux;
+            }
+            if (data.ItemData.ItemType == "SingleComparison")
+            {
+                string[] lItemInfo = [Request.Form["LItemInfo1"], Request.Form["LItemInfo2"], Request.Form["LItemInfo3"]];
+                string[] rItemInfo = [Request.Form["RItemInfo1"], Request.Form["RItemInfo2"], Request.Form["RItemInfo3"]];
+                data.SingleComparisonData.LeftItem.SetInfoFromArray(lItemInfo);
+                data.SingleComparisonData.RightItem.SetInfoFromArray(rItemInfo);
+            }
 
             var newItem = ContentItemDataAdapter.ItemRowFromDataObject(data);
             newItem.Iid = IID;
