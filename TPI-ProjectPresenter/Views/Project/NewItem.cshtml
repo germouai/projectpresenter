@@ -1,0 +1,127 @@
+﻿@model TPI_ProjectPresenter.Models.DataTx.ViewItemData;
+
+@{
+    ViewData["Title"] = "NewItem";
+}
+
+@section Scripts
+{
+    <script>
+        const divs = document.querySelectorAll('.itemdetail');
+
+        document.addEventListener("DOMContentLoaded", hideDivs("TextOnly"));
+
+        function hideDivs(tab) {
+
+            divs.forEach(div =>
+            {
+                if (div.id != tab)
+                {
+                    div.style.display = 'none';
+                }
+                else
+                {
+                    div.style.display = 'block';
+                }
+            });
+        }
+    </script>
+}
+
+<div class="container-lg">
+    <div class="text-center"><h1>New Item</h1></div>
+    <form class="form-floating mb-3" asp-controller="Project" asp-action="NewItem" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <input type="hidden" name="PID" asp-for="PID" value="@Model.PID" />
+            <input type="hidden" name="TID" asp-for="TID" value="@Model.TID" />
+            <input type="hidden" name="SID" asp-for="SID" value="@Model.SID" />
+			<input type="hidden" name="Idetdata.IID" asp-for="ItemData.IID" value="0" />
+            <div class="col-8 offset-lg-2">
+                <label asp-for="ItemData.ItemTitle" class="form-label">Item Title: </label>
+                <input name="ItemData.ItemTitle" class="form-control form-text" type="text" asp-for="ItemData.ItemTitle" />
+            </div>
+            <div class="col-8 offset-lg-2">
+                <label asp-for="ItemData.ItemText" class="form-label">Tooltip: </label>
+                <textarea id="ItemData.ItemText" name="ItemData.ItemText" class="form-control" rows="5" asp-for="ItemData.ItemText"> </textarea>
+            </div>
+            <div class="col-8 offset-lg-2">
+                <label asp-for="ItemData.ItemType" class="form-label">Item Type: </label>
+                <select id="ItemData.ItemType" name="ItemData.ItemType" class="form-select" asp-for="ItemData.ItemType" onchange="hideDivs(this.value)">
+                    <option value="TextOnly">Text Only</option>
+                    <option value="SingleImage">Single Image</option>
+                    <option value="SingleComparison">Single Comparison</option>
+				</select>
+            </div>
+        </div>
+        
+        
+        <div class="row itemdetail" id="TextOnly">
+
+        </div>
+        <div class="row itemdetail" id="SingleImage">
+            <div class="col-8 offset-lg-2">
+                <label asp-for="ImgFile" class="form-label">Item Image: </label>
+                <input name="ImgFile" type="file" class="form-control" asp-for="ImgFile" />
+            </div>
+        </div>
+        <div class="row itemdetail" id="SingleComparison">
+            <div class="col-8 offset-lg-2">
+                <div class="row">
+                    <div class="col-4 offset-lg-1">
+                        <div class="row">
+                            <label asp-for="SingleComparisonData.LeftItem.ItemTitle">Left Title:</label>
+                            <input name="SingleComparisonData.LeftItem.ItemTitle" class="form-control form-text" type="text" asp-for="SingleComparisonData.LeftItem.ItemTitle" />
+                        </div>
+                        <div class="row">
+                            <label asp-for="SingleComparisonData.LeftItem.ItemDetail">Left Detail:</label>
+						    <textarea id="SingleComparisonData.LeftItem.ItemDetail" name="SingleComparisonData.LeftItem.ItemDetail" class="form-control" rows="5" asp-for="SingleComparisonData.LeftItem.ItemDetail"> </textarea>
+                        </div>
+                        <div class="row">
+                            <label>Info1</label>
+						    <input name="LItemInfo1" class="form-control form-text" type="text" />
+                        </div>
+                        <div class="row">
+						    <label>Info2</label>
+                            <input name="LItemInfo2" class="form-control form-text" type="text" />
+					    </div>
+                        <div class="row">
+                            <label>Info3</label>
+                            <input name="LItemInfo3" class="form-control form-text" type="text" />
+                        </div>
+                    </div>
+                    <div class="col-4 offset-lg-2">
+                        <div class="row">
+                            <label asp-for="SingleComparisonData.RightItem.ItemTitle">Right Title:</label>
+                            <input name="SingleComparisonData.RightItem.ItemTitle" class="form-control form-text" type="text" asp-for="SingleComparisonData.RightItem.ItemTitle" />
+                        </div>
+                        <div class="row">
+                            <label asp-for="SingleComparisonData.RightItem.ItemDetail">Right Detail:</label>
+                            <textarea id="SingleComparisonData.RightItem.ItemDetail" name="SingleComparisonData.RightItem.ItemDetail" class="form-control" rows="5" asp-for="SingleComparisonData.RightItem.ItemDetail"> </textarea>
+                        </div>
+                        <div class="row">
+                            <label>Info1</label>
+                            <input name="RItemInfo1" class="form-control form-text" type="text" />
+                        </div>
+                        <div class="row">
+                            <label>Info2</label>
+                            <input name="RItemInfo2" class="form-control form-text" type="text" />
+                        </div>
+                        <div class="row">
+                            <label>Info3</label>
+                            <input name="RItemInfo3" class="form-control form-text" type="text" />
+                        </div>
+			        </div>
+                </div>
+			</div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-2 offset-lg-8 offset-sm-4 align-content-end">
+                <button class="btn btn-primary" type="submit">Create</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+

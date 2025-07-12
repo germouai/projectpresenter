@@ -1,6 +1,6 @@
 ﻿namespace TPI_ProjectPresenter.Models.DataTx
 {
-    public class NewSectionData
+    public class ViewSectionData
     {
         public int PID { get; set; }
         public int TID { get; set; }

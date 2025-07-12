@@ -2,7 +2,7 @@
 
 namespace TPI_ProjectPresenter.Models.DataTx
 {
-    public class NewProjectEntityData
+    public class ViewProjectEntityData
     {
         public Models.Projects.ProjectEntity ProjectData { get; set; }
         public IFormFile? ImgFile { get; set; }

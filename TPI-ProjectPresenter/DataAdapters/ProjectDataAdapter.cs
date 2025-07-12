@@ -59,7 +59,7 @@ namespace TPI_ProjectPresenter.DataAdapters
                     sectObj.SID = sect.Sid;
                     sectObj.SectionName = sect.Name;
                     sectObj.SectionTooltip = sect.Tooltip;
-                    sectObj.setContent(ContentItemsDataAdapter.ItemsFromItemRows(sect.ContentItems.ToList()));
+                    sectObj.setContent(ContentItemDataAdapter.ItemsFromItemRows(sect.ContentItems.ToList()));
 
 
 

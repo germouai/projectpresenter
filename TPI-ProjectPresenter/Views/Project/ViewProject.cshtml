@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = "ViewProject";
+
+    var activeTab = ViewBag.ActiveTab;
+    ViewBag.PID = Model.PID;
 }
 
 @section Scripts
@@ -9,7 +12,7 @@
     <script>
         const divs = document.querySelectorAll('.contentrow');
 
-        document.addEventListener("DOMContentLoaded", hideDivs(1));
+        document.addEventListener("DOMContentLoaded", hideDivs(@activeTab));
 
         function hideDivs(tab) {
 
@@ -21,7 +24,7 @@
                 }
                 else 
                 {
-                    div.style.display = 'block';   
+                    div.style.display = 'block';
                 }
             });
         }
@@ -56,9 +59,11 @@
     {
         foreach (var tab in Model.GetTabs())
         {
+            ViewBag.TID = tab.TID;
             <div class="row contentrow" id="@tab.TID">
                     @foreach (var section in tab.GetSections())
                     {
+                        ViewBag.SID = section.SID;
                         <partial name="ProjectSection/_ContentSection" , model="section" />
                         <br />
                     }                    

@@ -9,6 +9,8 @@
         public ContentItemSingleComparison() 
         {
             ItemType = "SingleComparison";
+            LeftItem = new ComparisonItem();
+            RightItem = new ComparisonItem();
         }
         public ContentItemSingleComparison(ComparisonItem? leftItem, ComparisonItem? rightItem) : this()
         {

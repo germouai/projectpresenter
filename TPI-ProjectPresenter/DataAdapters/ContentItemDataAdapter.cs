@@ -3,10 +3,11 @@ using System.ComponentModel;
 using System.Dynamic;
 using TPI_ProjectPresenter.Models.DAO;
 using TPI_ProjectPresenter.Models.ProjectContent;
+using TPI_ProjectPresenter.Models.DataTx;
 
 namespace TPI_ProjectPresenter.DataAdapters
 {
-    public abstract class ContentItemsDataAdapter
+    public abstract class ContentItemDataAdapter
     {
 
         public static List<Models.ProjectContent.ContentItem> ItemsFromItemRows(List<Models.DAO.ContentItem> pItems)
@@ -49,6 +50,66 @@ namespace TPI_ProjectPresenter.DataAdapters
             }
 
             return aux;
+        }
+
+        public static Models.DAO.ContentItem ItemRowFromDataObject(ViewItemData data)
+        {
+            Models.DAO.ContentItem item = new Models.DAO.ContentItem
+            {
+                Pid = data.PID,
+                Tid = data.TID,
+                Sid = data.SID,
+                Iid = data.ItemData.IID,
+                Title = data.ItemData.ItemTitle,
+                Text = data.ItemData.ItemText,
+                Type = data.ItemData.ItemType
+            };
+            switch (data.ItemData.ItemType)
+            {
+                case "TextOnly":
+                    break;
+                case "SingleImage":
+                    item.ContentSingleImages.Add(new ContentSingleImage { ImageRef = (data.ItemData as ContentItemSingleImage).ImageRef });
+                    break;
+                case "SingleComparison":
+                    var litem = new ContentSingleComparison
+                    {
+                        Lr = "l",
+                        Title = data.SingleComparisonData.LeftItem.ItemTitle,
+                        Detail = data.SingleComparisonData.LeftItem.ItemDetail
+                    };
+                    int i = 0;
+                    foreach (var inf in data.SingleComparisonData.LeftItem.ItemizedInfo)
+                    {
+                        litem.ComparisonItemInfos.Add(new ComparisonItemInfo
+                        {
+                            OrderNo = i,
+                            Info = inf
+                        });
+                        i++;
+                    }
+                    i = 0;
+                    var ritem = new ContentSingleComparison
+                    {
+                        Lr = "r",
+                        Title = data.SingleComparisonData.RightItem.ItemTitle,
+                        Detail = data.SingleComparisonData.RightItem.ItemDetail
+                    };
+                    foreach (var inf in data.SingleComparisonData.RightItem.ItemizedInfo)
+                    {
+                        ritem.ComparisonItemInfos.Add(new ComparisonItemInfo
+                        {
+                            OrderNo = i,
+                            Info = inf
+                        });
+                        i++;
+                    }
+                    item.ContentSingleComparisons.Add(litem);
+                    item.ContentSingleComparisons.Add(ritem);
+                    break;
+                // Add other cases as needed
+            }
+            return item;
         }
 
         public static dynamic? CreateInstance(string className)

@@ -41,14 +41,14 @@ namespace TPI_ProjectPresenter.Controllers
         [HttpGet]
         public IActionResult NewProject()
         {
-            var aux = new NewProjectEntityData() { ProjectData = new ProjectEntity() };
+            var aux = new ViewProjectEntityData() { ProjectData = new ProjectEntity() };
 
 
             return View(aux);
         }
 
         [HttpPost]
-        public IActionResult NewProject(NewProjectEntityData np)
+        public IActionResult NewProject(ViewProjectEntityData np)
         {
             var aux = _DBContext.Projects.OrderByDescending(p => p.Pid).ToList();
 
@@ -76,20 +76,20 @@ namespace TPI_ProjectPresenter.Controllers
             _DBContext.ProjectTabs.Add(new Models.DAO.ProjectTab() { Pid = PID, Tid = tabCount + 1, Name = TabName });
 
             _DBContext.SaveChanges();
-            return RedirectToAction($"ViewProject", new { ppid = PID });
+            return RedirectToAction($"ViewProject", new { ppid = PID, ptid = tabCount+1 });
         }
 
         [HttpGet]
         public IActionResult NewSection(int pPID, int pTID)
         {
-            var aux = new NewSectionData();
+            var aux = new ViewSectionData();
             aux.PID = pPID;
             aux.TID = pTID;
 
             return View(aux);
         }
         [HttpPost]
-        public IActionResult NewSection(NewSectionData data)
+        public IActionResult NewSection(ViewSectionData data)
         {
             var aux = _DBContext.ContentSections.Where(p => p.Pid == data.PID && p.Tid == data.TID).OrderByDescending(p => p.Sid).ToList();
             int SID;
@@ -104,8 +104,38 @@ namespace TPI_ProjectPresenter.Controllers
             _DBContext.ContentSections.Add(newSection);
             _DBContext.SaveChanges();
 
-            return RedirectToAction("ViewProject", new { ppid =  data.PID });
+            return RedirectToAction("ViewProject", new { ppid =  data.PID, ptid = data.TID });
         }
+
+        [HttpGet]
+        public IActionResult NewItem(int pPID, int pTID, int pSID)
+        {
+            var aux = new ViewItemData();
+            aux.PID = pPID;
+            aux.TID = pTID;
+            aux.SID = pSID;
+            return View(aux);
+        }
+        [HttpPost]
+        public IActionResult NewItem(ViewItemData data)
+        {
+            var aux = _DBContext.ContentItems.Where(p => p.Pid == data.PID && p.Tid == data.TID && p.Sid == data.SID).OrderByDescending(p => p.Iid).ToList();
+            int IID;
+            if (aux.Count > 0) { IID = aux.FirstOrDefault().Iid + 1; }
+            else { IID = 1; }
+
+
+
+            var newItem = ContentItemDataAdapter.ItemRowFromDataObject(data);
+            newItem.Iid = IID;
+            newItem.Pid = data.PID;
+            newItem.Tid = data.TID;
+            newItem.Sid = data.SID;
+            _DBContext.ContentItems.Add(newItem);
+            _DBContext.SaveChanges();
+            return RedirectToAction("ViewProject", new { ppid = data.PID, ptid = data.TID });
+        }
+
 
 
         [HttpGet]
@@ -135,6 +165,7 @@ namespace TPI_ProjectPresenter.Controllers
 
             //var qry = _DBContext.ContentSections.FromSql($"select * from ContentSection where PID={1} AND TID={1}").ToList();
 
+            ViewBag.activeTab = pTID;
             return View(prjObj);
         }
 

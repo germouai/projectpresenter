@@ -1,13 +1,22 @@
 ﻿@model TPI_ProjectPresenter.Models.ProjectContent.ContentSection
 
 <div class="col-12 ContentSectionContainer">
-	<h2>@Model.SectionName</h2>
-	<p class="SectionTooltip">@Model.SectionTooltip</p>
-	@foreach (var item in @Model.GetContentItems())
-	{
-		<div class="col-12 align-self-center">
-			<h3>@item.ItemTitle</h3>
-			<partial name="ProjectContent/_@item.ItemType" , model="@item" />
+	<div class="row">
+		<h2>@Model.SectionName</h2>
+		<p class="SectionTooltip">@Model.SectionTooltip</p>
+	</div>
+	<div class="row">
+		@foreach (var item in @Model.GetContentItems())
+		{
+			<div class="col-12 align-self-center">
+				<h3>@item.ItemTitle</h3>
+				<partial name="ProjectContent/_@item.ItemType" , model="@item" />
+			</div>
+		}
+	</div>
+	<div class="row">
+		<div class="col-2 offset-lg-10 offset-sm-6">
+			<a asp-action="NewItem" asp-controller="Project" asp-route-ppid="@ViewBag.PID" asp-route-ptid="@ViewBag.TID" asp-route-psid="@ViewBag.SID"><button class="btn btn-primary">New Item</button></a>
 		</div>
-	}
+	</div>
 </div>
