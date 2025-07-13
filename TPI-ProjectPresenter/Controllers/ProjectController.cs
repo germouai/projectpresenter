@@ -152,6 +152,118 @@ namespace TPI_ProjectPresenter.Controllers
             return RedirectToAction("ViewProject", new { ppid = data.PID, ptid = data.TID });
         }
 
+        [HttpGet]
+        public IActionResult EditProject(int pPID)
+        {
+            var prj = _DBContext.Projects.Find(pPID);
+            if (prj == null) return NotFound();
+            var prjObj = ProjectDataAdapter.ProjectHeaderFromProject(prj);
+            var aux = new ViewProjectEntityData() { ProjectData = prjObj };
+            return View(aux);
+        }
+
+        [HttpPost]
+        public IActionResult EditProject(ViewProjectEntityData pData)
+        {
+            var prj = _DBContext.Projects.Find(pData.ProjectData.PID);
+            if (prj == null) return NotFound();
+            prj.Name = pData.ProjectData.Header.ProjectName;
+            prj.Description = pData.ProjectData.Header.ProjectDescription;
+            prj.Tooltip = pData.ProjectData.Header.ProjectTooltip;
+            if (pData.ImgFile != null)
+            {
+                prj.ImgRef = UploadImage(pData.ImgFile);
+            }
+            _DBContext.SaveChanges();
+            return RedirectToAction("ViewProject", new { pPID = pData.ProjectData.PID });
+        }
+
+        [HttpGet]
+        public IActionResult EditSection(int pPID, int pTID, int pSID)
+        {
+            var section = _DBContext.ContentSections.Find(pPID, pTID, pSID);
+            if (section == null) return NotFound();
+            var aux = new ViewSectionData();
+            aux.PID = pPID;
+            aux.TID = pTID;
+            aux.section = ContentSectionDataAdapter.SectionObjectFromRow(section);
+            return View(aux);
+        }
+
+        [HttpPost]
+        public IActionResult EditSection(ViewSectionData pData)
+        {
+            var section = _DBContext.ContentSections.Find(pData.PID, pData.TID, pData.section.SID);
+            if (section == null) return NotFound();
+            section.Name = pData.section.SectionName;
+            section.Tooltip = pData.section.SectionTooltip;
+            _DBContext.SaveChanges();
+            return RedirectToAction("ViewProject", new { pPID = pData.PID, pTID = pData.TID });
+        }
+
+
+
+
+
+
+
+
+        [HttpGet]
+        public IActionResult DeleteProject(int pPID)
+        {
+            var prj = _DBContext.Projects.Find(pPID);
+            if (prj == null) return NotFound();
+            var aux = new ViewProjectEntityData();
+            aux.ProjectData = ProjectDataAdapter.ProjectHeaderFromProject(prj);
+            return View(aux);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteProject(ViewProjectEntityData pData)
+        {
+            var prj = _DBContext.Projects.Find(pData.ProjectData.PID);
+            if (prj == null) return NotFound();
+
+
+            _DBContext.ComparisonItemInfos.RemoveRange(_DBContext.ComparisonItemInfos.Where(i => i.Pid == prj.Pid));
+            _DBContext.ContentSingleComparisons.RemoveRange(_DBContext.ContentSingleComparisons.Where(c => c.Pid == prj.Pid));
+            _DBContext.ContentSingleImages.RemoveRange(_DBContext.ContentSingleImages.Where(i => i.Pid == prj.Pid));
+            _DBContext.ContentItems.RemoveRange(_DBContext.ContentItems.Where(i => i.Pid == prj.Pid));
+            _DBContext.ContentSections.RemoveRange(_DBContext.ContentSections.Where(s => s.Pid == prj.Pid));
+            _DBContext.ProjectTabs.RemoveRange(_DBContext.ProjectTabs.Where(t => t.Pid == prj.Pid));
+
+            _DBContext.Projects.Remove(prj);
+            _DBContext.SaveChanges();
+            return RedirectToAction("ProjectList");
+        }
+
+        [HttpGet]
+        public IActionResult DeleteSection(int pPID, int pTID, int pSID)
+        {
+            var section = _DBContext.ContentSections.Find(pPID, pTID, pSID);
+            if (section == null) return NotFound();
+            var aux = new ViewSectionData();
+            aux.PID = pPID;
+            aux.TID = pTID;
+            aux.section = ContentSectionDataAdapter.SectionObjectFromRow(section);
+            return View(aux);
+        }
+        [HttpPost]
+        public IActionResult DeleteSection(ViewSectionData pData)
+        {
+            var section = _DBContext.ContentSections.Find(pData.PID, pData.TID, pData.section.SID);
+            if (section == null) return NotFound();
+
+            _DBContext.ComparisonItemInfos.RemoveRange(_DBContext.ComparisonItemInfos.Where(i => i.Pid == section.Pid && i.Tid == section.Tid && i.Sid == i.Sid));
+            _DBContext.ContentSingleComparisons.RemoveRange(_DBContext.ContentSingleComparisons.Where(c => c.Pid == section.Pid && c.Tid == section.Tid && c.Sid == c.Sid));
+            _DBContext.ContentSingleImages.RemoveRange(_DBContext.ContentSingleImages.Where(i => i.Pid == section.Pid && i.Tid == section.Tid && i.Sid == i.Sid));
+            _DBContext.ContentItems.RemoveRange(_DBContext.ContentItems.Where(i => i.Pid == section.Pid && i.Tid == section.Tid && i.Sid == section.Sid));
+            _DBContext.ContentSections.Remove(section);
+            
+            _DBContext.SaveChanges();
+            return RedirectToAction("ViewProject", new { pPID = pData.PID, pTID = pData.TID });
+        }
+
 
 
         [HttpGet]

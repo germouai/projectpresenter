@@ -61,21 +61,19 @@ namespace TPI_ProjectPresenter.DataAdapters
                     sectObj.SectionTooltip = sect.Tooltip;
                     sectObj.setContent(ContentItemDataAdapter.ItemsFromItemRows(sect.ContentItems.ToList()));
 
-
-
                     tabObj.AddSection(sectObj);
                 }
-
-
 
                 aux.AddTab(tabObj);
             }
 
-
-
-
             return aux;
         }
-        
+
+        public static Models.Projects.ProjectEntity ProjectHeaderFromProject(Models.DAO.Project pProject)
+        {
+            return new Models.Projects.ProjectEntity(pProject.Pid, pProject.Name, pProject.Description, pProject.Tooltip, pProject.ImgRef);
+        }
+
     }
 }

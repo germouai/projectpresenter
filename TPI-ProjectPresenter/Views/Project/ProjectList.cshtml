@@ -10,6 +10,7 @@
         <ul class="list-group">
                 @foreach (var project in @Model)
                 {
+				ViewBag.PID = project.PID;
                     <li class="list-group-item">
                         <div class="row">    
                             <partial name="ProjectList/_ProjectListItem" , model="project" />

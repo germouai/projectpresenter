@@ -2,8 +2,18 @@
 
 <div class="col-12 ContentSectionContainer">
 	<div class="row">
-		<h2>@Model.SectionName</h2>
-		<p class="SectionTooltip">@Model.SectionTooltip</p>
+		<div class="col-lg-10 col-sm-7">
+			<h2>@Model.SectionName</h2>
+			<p class="SectionTooltip">@Model.SectionTooltip</p>
+		</div>
+		<div class="col-lg-2 col-sm-1 justify-content-evenly">
+			<a class="nav-link text-dark" asp-action="EditSection" asp-controller="Project" asp-route-ppid="@ViewBag.PID" asp-route-ptid="@ViewBag.TID" asp-route-psid="@Model.SID">
+				<button class="btn btn-sm btn-secondary"><i class="bi bi-pencil-square float-end"></i></button>
+			</a>
+			<a class="nav-link text-dark" asp-action="DeleteSection" asp-controller="Project" asp-route-ppid="@ViewBag.PID" asp-route-ptid="@ViewBag.TID" asp-route-psid="@Model.SID">
+				<button class="btn btn-sm btn-danger"><i class="bi bi-file-x float-end"></i></button>
+			</a>
+		</div>
 	</div>
 	<div class="row">
 		@foreach (var item in @Model.GetContentItems())

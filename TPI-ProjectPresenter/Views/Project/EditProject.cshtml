@@ -1,21 +1,28 @@
 ﻿@model TPI_ProjectPresenter.Models.DataTx.ViewProjectEntityData;
 
 @{
-    ViewData["Title"] = "NewProject";
+    ViewData["Title"] = "EditProject";
 }
 
 <div class="container-lg">
-    <div class="text-center"><h1>New Project</h1></div>
+    <div class="text-center"><h1>Edit Project</h1></div>
     <div class="row">
-        <form class="form-floating mb-3" asp-controller="Project" asp-action="NewProject" method="post" enctype="multipart/form-data">
+        <form class="form-floating mb-3" asp-controller="Project" asp-action="EditProject" method="post" enctype="multipart/form-data">
             <input type="hidden" name="ProjectData.PID" asp-for="ProjectData.PID" value="@Model.ProjectData.PID" />
             <div class="col-8 offset-lg-2">
                 <label asp-for="ProjectData.Header.ProjectName" class="form-label">Name: </label>
                 <input name="ProjectData.Header.ProjectName" class="form-control form-text" type="text" asp-for="ProjectData.Header.ProjectName" />
             </div>
             <div class="col-8 offset-lg-2">
-                <label asp-for="ImgFile" class="form-label">Project Image: </label>
-                <input name="ImgFile" type="file" class="form-control" asp-for="ImgFile" />
+				<div class="row">
+                    <div class="col-3">
+                        <img class="img-fluid float-start ProjectImage" src="/img/@Model.ProjectData.Header.ProjectImgRef"/>
+                    </div>
+                    <div class="col-lg-9 col-sm-5">
+                        <label asp-for="ImgFile" class="form-label">Change Image: </label>
+                        <input name="ImgFile" type="file" class="form-control" asp-for="ImgFile" />
+                    </div>
+                </div>
             </div>
             <div class="col-8 offset-lg-2">
                 <label asp-for="ProjectData.Header.ProjectDescription" class="form-label">Project Description: </label>
@@ -26,9 +33,10 @@
                 <textarea id="ProjectTooltip" name="ProjectData.Header.ProjectTooltip" class="form-control" rows="5" asp-for="ProjectData.Header.ProjectTooltip"> </textarea>
             </div>
             <div class="col-2 offset-lg-8 offset-sm-4 align-content-end">
-                <button class="btn btn-primary" type="submit">Create</button>
+                <button class="btn btn-primary" type="submit">Edit</button>
             </div>
         </form>
     </div>
 </div>
+
 

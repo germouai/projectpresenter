@@ -1,12 +1,20 @@
 ﻿@model TPI_ProjectPresenter.Models.Projects.ProjectEntity
 
-<a class="nav-link text-dark" asp-area="" asp-controller="Project" asp-action="ViewProject" asp-route-ppid="@Model.PID">
-
-			<div class="col-1"><img class="img-fluid float-start ProjectImage" src="/img/@Model.Header.ProjectImgRef" /></div>
-			<div class="col-10">
-				<h4 class="row ProjectListName">@Model.Header.ProjectName</h4>
-				<div class="row text-truncate ProjectListDescription">@Model.Header.ProjectDescription</div>
-			</div>
-			<div class="col-1 float-end"><i class="bi bi-arrow-up-right-square-fill float-end"></i></div>
-
-</a>
+<div class="col-2"><img class="img-fluid float-start ProjectImage" src="/img/@Model.Header.ProjectImgRef" /></div>
+<div class="col-lg-9 col-sm-5">
+	<a class="text-dark link-dark" asp-area="" asp-controller="Project" asp-action="ViewProject" asp-route-ppid="@Model.PID">
+		<h4 class="row ProjectListName">@Model.Header.ProjectName</h4>
+	</a>
+	<div class="row text-truncate ProjectListDescription">@Model.Header.ProjectDescription</div>
+</div>
+<div class="col-1 float-end row-cols-3 align-content-center">
+		<a class="nav-link text-dark" asp-area="" asp-controller="Project" asp-action="ViewProject" asp-route-ppid="@Model.PID">
+			<button class="btn btn-sm btn-primary"><i class="bi bi-arrow-up-right-square-fill float-end"></i></button>
+		</a>
+		<a class="nav-link text-dark" asp-area="" asp-controller="Project" asp-action="EditProject" asp-route-ppid="@Model.PID">
+			<button class="btn btn-sm btn-secondary"><i class="bi bi-pencil-square float-end"></i></button>
+		</a>
+		<a class="nav-link text-dark" asp-area="" asp-controller="Project" asp-action="DeleteProject" asp-route-ppid="@Model.PID">
+			<button class="btn btn-sm btn-danger"><i class="bi bi-folder-x float-end"></i></button>
+		</a>
+</div>

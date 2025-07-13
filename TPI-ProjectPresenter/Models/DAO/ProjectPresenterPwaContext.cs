@@ -269,7 +269,7 @@ public partial class ProjectPresenterPwaContext : DbContext
                 .ValueGeneratedNever()
                 .HasColumnName("PID");
             entity.Property(e => e.Description)
-                .HasMaxLength(200)
+                .HasMaxLength(1000)
                 .IsUnicode(false);
             entity.Property(e => e.ImgRef)
                 .HasMaxLength(50)

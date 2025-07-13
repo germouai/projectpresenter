@@ -13,5 +13,16 @@
 
             return sectionRow;
         }
+
+        public static Models.ProjectContent.ContentSection SectionObjectFromRow(Models.DAO.ContentSection pSectionRow)
+        {
+            Models.ProjectContent.ContentSection sectionObj = new Models.ProjectContent.ContentSection()
+            {
+                SID = pSectionRow.Sid,
+                SectionName = pSectionRow.Name,
+                SectionTooltip = pSectionRow.Tooltip
+            };
+            return sectionObj;
+        }
     }
 }
