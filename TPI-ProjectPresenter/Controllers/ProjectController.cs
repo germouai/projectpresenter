@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TPI_ProjectPresenter.Models.DAO;
-using TPI_ProjectPresenter.Models.ProjectContent;
-using TPI_ProjectPresenter.Models.Projects;
-using TPI_ProjectPresenter.Models.DataTx;
-using TPI_ProjectPresenter.DataAdapters;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
-using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using TPI_ProjectPresenter.DataAdapters;
+using TPI_ProjectPresenter.Models.DAO;
+using TPI_ProjectPresenter.Models.DataTx;
+using TPI_ProjectPresenter.Models.ProjectContent;
+using TPI_ProjectPresenter.Models.Projects;
+using static System.Collections.Specialized.BitVector32;
 
 namespace TPI_ProjectPresenter.Controllers
 {
@@ -178,6 +179,36 @@ namespace TPI_ProjectPresenter.Controllers
             return RedirectToAction("ViewProject", new { pPID = pData.ProjectData.PID });
         }
 
+
+        [HttpGet]
+        public IActionResult EditTabs(int pPID)
+        {
+            var prj = _DBContext.Projects.Where(p => p.Pid == pPID).Include(p => p.ProjectTabs);
+            if (prj == null) return NotFound();
+
+            var aux = ProjectDataAdapter.ProjectTabsFromRow(prj.First());
+            return View(aux);
+        }
+
+        [HttpPost]
+        public IActionResult EditTabs(int PID, int tabcount)
+        {
+            var prj = _DBContext.Projects.Find(PID);
+            if (prj == null) return NotFound();
+            var tabs = _DBContext.ProjectTabs.Where(t => t.Pid == PID).ToList();
+            foreach (var tab in tabs)
+            {
+                var newName = Request.Form[$"Tab-{tab.Tid}"];
+                if (!string.IsNullOrEmpty(newName))
+                {
+                    tab.Name = newName;
+                }
+            }
+            _DBContext.SaveChanges();
+            return RedirectToAction("ViewProject", new { pPID = PID });
+        }
+
+
         [HttpGet]
         public IActionResult EditSection(int pPID, int pTID, int pSID)
         {
@@ -236,6 +267,25 @@ namespace TPI_ProjectPresenter.Controllers
             _DBContext.SaveChanges();
             return RedirectToAction("ProjectList");
         }
+
+
+        [HttpPost]
+        public IActionResult DeleteTab(int PID, int TID)
+        {
+            var tab = _DBContext.ProjectTabs.Find(PID, TID);
+            if (tab == null) return NotFound();
+
+            _DBContext.ComparisonItemInfos.RemoveRange(_DBContext.ComparisonItemInfos.Where(i => i.Pid == tab.Pid && i.Tid == tab.Tid));
+            _DBContext.ContentSingleComparisons.RemoveRange(_DBContext.ContentSingleComparisons.Where(c => c.Pid == tab.Pid && c.Tid == tab.Tid));
+            _DBContext.ContentSingleImages.RemoveRange(_DBContext.ContentSingleImages.Where(i => i.Pid == tab.Pid && i.Tid == tab.Tid));
+            _DBContext.ContentItems.RemoveRange(_DBContext.ContentItems.Where(i => i.Pid == tab.Pid && i.Tid == tab.Tid));
+            _DBContext.ContentSections.RemoveRange(_DBContext.ContentSections.Where(s => s.Pid == tab.Pid && s.Tid == tab.Tid));
+            _DBContext.ProjectTabs.Remove(tab);
+
+            _DBContext.SaveChanges();
+            return RedirectToAction("EditTabs", new { pPID = PID });
+        }
+
 
         [HttpGet]
         public IActionResult DeleteSection(int pPID, int pTID, int pSID)

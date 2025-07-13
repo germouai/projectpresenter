@@ -50,6 +50,7 @@
                     <partial name="ProjectSection/_ProjectTabs", model="tab" />
                 }
                 <li class="nav-item"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTabModal">​<i class="bi bi-plus-square-fill float-end"></i></button></li>
+                <li class="nav-item"><a asp-action="EditTabs" asp-controller="Project" asp-route-ppid="@Model.PID"><button type="button" class="btn btn-secondary">​<i class="bi bi-pencil-square float-end"></i></button></a></li>
             </ul>
         </div>
     </div>

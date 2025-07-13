@@ -1,0 +1,74 @@
+﻿@model TPI_ProjectPresenter.Models.Projects.ProjectEntity;
+
+@{
+    ViewData["Title"] = "EditTabs";
+}
+
+@section Scripts
+{
+    <script>
+        var tabrows = document.querySelectorAll(".delBtn");
+
+        for (var row of tabrows) {
+            row.addEventListener("click", function () {
+                var tid = this.getAttribute("data-tid");
+                var name = this.getAttribute("data-name");
+                LoadInfo(tid, name);
+            });
+        }
+
+        function LoadInfo(tid, name) 
+        {
+            document.getElementById("modalTabName").value = name;
+            document.getElementById("modalTID").value = tid
+            return false;
+        }
+    </script>
+}
+
+<div class="container-lg">
+    <div class="text-center"><h1>Edit Project Tabs</h1></div>
+    <div class="row">
+        <form class="form-floating mb-3" asp-controller="Project" asp-action="EditTabs" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="PID" asp-for="PID" value="@Model.PID" />
+            @foreach (var tab in Model.GetTabs())
+            {
+                <div class="row">
+                    <div class="col-7 offset-lg-2">
+                        <label class="form-label">Tab @tab.TID Name: </label>
+                        <input name="Tab-@tab.TID" class="form-control form-text" type="text" value="@tab.TabName"/>
+                    </div>
+                    <div class="col-1 row-cols-2 align-content-center">
+                        <button type="button" class="btn-sm btn-danger delBtn" data-bs-toggle="modal" data-bs-target="#delTabModal" data-tid="@tab.TID" data-name="@tab.TabName"><i class="bi bi-folder-minus"></i></button>
+                    </div>
+                </div>
+			}            
+            <div class="col-2 offset-lg-8 offset-sm-4 align-content-end">
+                <button class="btn btn-primary" type="submit">Edit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="delTabModal" tabindex="-1" aria-labelledby="delTabModalLabel" aria-hidden="true">​
+    <div class="modal-dialog">​
+        <div class="modal-content">​
+            <div class="modal-header">​
+                <h1 class="modal-title fs-5" id="delTabModalLabel">Delete Tab Modal</h1>​
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>​
+            </div>​
+            <form class="form-floating mb-3" asp-controller="Project" asp-action="DeleteTab">
+                <input type="hidden" name="PID" value="@Model.PID" />
+                <input id="modalTID" type="hidden" name="TID" value="" />
+                <div class="modal-body">​                
+                    <label class="form-label">Name: </label>
+                    <input id="modalTabName" name="TabName" disabled class="form-control form-text" type="text" value=""/>
+                </div>​
+                <div class="modal-footer">​
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>​
+                    <button type="submit" class="btn btn-danger" >Delete</button>​
+                </div>​
+            </form>
+        </div>​
+    </div>​
+</div>

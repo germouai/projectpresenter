@@ -75,5 +75,16 @@ namespace TPI_ProjectPresenter.DataAdapters
             return new Models.Projects.ProjectEntity(pProject.Pid, pProject.Name, pProject.Description, pProject.Tooltip, pProject.ImgRef);
         }
 
+        public static Models.Projects.ProjectEntity ProjectTabsFromRow(Models.DAO.Project pProject)
+        {
+            Models.Projects.ProjectEntity aux = new Models.Projects.ProjectEntity(pProject.Pid, pProject.Name, pProject.Description, pProject.Tooltip, pProject.ImgRef);
+            foreach (var tab in pProject.ProjectTabs)
+            {
+                var tabObj = new Models.Projects.ProjectTab(tab.Tid, tab.Name);
+                aux.AddTab(tabObj);
+            }
+            return aux;
+        }
+
     }
 }
