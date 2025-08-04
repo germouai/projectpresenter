@@ -112,6 +112,85 @@ namespace TPI_ProjectPresenter.DataAdapters
             return item;
         }
 
+        public static Models.DataTx.ViewItemData DataObjectFromItemRow(Models.DAO.ContentItem itemRow)
+        {
+            var aux = new Models.DataTx.ViewItemData
+            {
+                PID = itemRow.Pid,
+                TID = itemRow.Tid,
+                SID = itemRow.Sid,
+                ItemData = new Models.ProjectContent.ContentItem()
+                {
+                    IID = itemRow.Iid,
+                    ItemTitle = itemRow.Title,
+                    ItemText = itemRow.Text
+                }
+
+            };
+            aux.ItemData.setItemType($"ContentItem{itemRow.Type}");
+            switch (itemRow.Type)
+            {
+                case "TextOnly":
+                    break;
+                case "SingleImage":
+                    aux.ImgRef = itemRow.ContentSingleImages.FirstOrDefault().ImageRef;
+                    break;
+                case "SingleComparison":
+                    var litem = itemRow.ContentSingleComparisons.FirstOrDefault(c => c.Lr == "l");
+                    var ritem = itemRow.ContentSingleComparisons.FirstOrDefault(c => c.Lr == "r");
+                    aux.SingleComparisonData = new Models.ProjectContent.ContentItemSingleComparison
+                    {
+                        LeftItem = new Models.ProjectContent.ComparisonItem(litem.Title, litem.Detail),
+                        RightItem = new Models.ProjectContent.ComparisonItem(ritem.Title, ritem.Detail)
+                    };
+                    aux.SingleComparisonData.LeftItem.SetInfoFromRowArray(litem.ComparisonItemInfos.OrderBy(inf => inf.OrderNo).ToArray());
+                    aux.SingleComparisonData.RightItem.SetInfoFromRowArray(ritem.ComparisonItemInfos.OrderBy(inf => inf.OrderNo).ToArray());
+                    break;
+            }
+
+            return aux;
+        }
+
+        public static List<Models.DAO.ContentSingleComparison> ComparisonRowFromDataObject(Models.ProjectContent.ContentItemSingleComparison data)
+        {
+            List<Models.DAO.ContentSingleComparison> aux = new List<Models.DAO.ContentSingleComparison>();
+            var litem = new Models.DAO.ContentSingleComparison
+            {
+                Lr = "l",
+                Title = data.LeftItem.ItemTitle,
+                Detail = data.LeftItem.ItemDetail
+            };
+            int i = 0;
+            foreach (var inf in data.LeftItem.ItemizedInfo)
+            {
+                litem.ComparisonItemInfos.Add(new ComparisonItemInfo
+                {
+                    OrderNo = i,
+                    Info = inf
+                });
+                i++;
+            }
+            aux.Add(litem);
+            var ritem = new Models.DAO.ContentSingleComparison
+            {
+                Lr = "r",
+                Title = data.RightItem.ItemTitle,
+                Detail = data.RightItem.ItemDetail
+            };
+            i = 0;
+            foreach (var inf in data.RightItem.ItemizedInfo)
+            {
+                ritem.ComparisonItemInfos.Add(new ComparisonItemInfo
+                {
+                    OrderNo = i,
+                    Info = inf
+                });
+                i++;
+            }
+            aux.Add(ritem);
+            return aux;
+        }
+
         public static dynamic? CreateInstance(string className)
         {
             var type = Type.GetType($"TPI_ProjectPresenter.Models.ProjectContent.{className}");

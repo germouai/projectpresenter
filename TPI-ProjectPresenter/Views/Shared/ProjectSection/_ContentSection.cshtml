@@ -6,7 +6,7 @@
 			<h2>@Model.SectionName</h2>
 			<p class="SectionTooltip">@Model.SectionTooltip</p>
 		</div>
-		<div class="col-lg-2 col-sm-1 justify-content-evenly">
+		<div class="col-lg-2 col-sm-1 btn-group">
 			<a class="nav-link text-dark" asp-action="EditSection" asp-controller="Project" asp-route-ppid="@ViewBag.PID" asp-route-ptid="@ViewBag.TID" asp-route-psid="@Model.SID">
 				<button class="btn btn-sm btn-secondary"><i class="bi bi-pencil-square float-end"></i></button>
 			</a>
@@ -19,7 +19,19 @@
 		@foreach (var item in @Model.GetContentItems())
 		{
 			<div class="col-12 align-self-center">
-				<h3>@item.ItemTitle</h3>
+				<div class="row">
+					<div class="col-lg-10 col-sm-6">
+						<h3>@item.ItemTitle</h3>
+					</div>
+					<div class="col-2 btn-group">
+						<a class="nav-link text-dark" asp-action="EditItem" asp-controller="Project" asp-route-ppid="@ViewBag.PID" asp-route-ptid="@ViewBag.TID" asp-route-psid="@Model.SID" asp-route-piid="@item.IID">
+							<button class="btn btn-sm btn-secondary"><i class="bi bi-pencil-fill float-end"></i></button>
+						</a>
+						<a class="nav-link text-dark" asp-action="DeleteItem" asp-controller="Project" asp-route-ppid="@ViewBag.PID" asp-route-ptid="@ViewBag.TID" asp-route-psid="@Model.SID" asp-route-piid="@item.IID">
+							<button class="btn btn-sm btn-danger"><i class="bi bi-trash float-end"></i></button>
+						</a>
+					</div>
+				</div>
 				<partial name="ProjectContent/_@item.ItemType" , model="@item" />
 			</div>
 		}

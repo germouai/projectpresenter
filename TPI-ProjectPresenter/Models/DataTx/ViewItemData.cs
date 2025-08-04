@@ -7,6 +7,7 @@
         public int SID { get; set; }
         public Models.ProjectContent.ContentItem ItemData { get; set; }
         public IFormFile? ImgFile { get; set; }
+        public string? ImgRef { get; set; }
         public Models.ProjectContent.ContentItemSingleComparison? SingleComparisonData { get; set; }
     }
 }

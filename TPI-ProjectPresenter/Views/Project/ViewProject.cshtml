@@ -4,6 +4,10 @@
     ViewData["Title"] = "ViewProject";
 
     var activeTab = ViewBag.ActiveTab;
+    if (activeTab == null && Model.GetFirstTab() != null)
+    {
+        activeTab = Model.GetFirstTab().TID;
+    }
     ViewBag.PID = Model.PID;
 }
 

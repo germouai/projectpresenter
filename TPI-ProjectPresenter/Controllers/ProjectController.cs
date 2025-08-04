@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
+using NuGet.Versioning;
 using System.IO;
 using TPI_ProjectPresenter.DataAdapters;
 using TPI_ProjectPresenter.Models.DAO;
@@ -73,11 +74,12 @@ namespace TPI_ProjectPresenter.Controllers
         public IActionResult NewTab(string TabName = "", int PID = 0)
         {
 
-            var tabCount = _DBContext.ProjectTabs.Where(t => t.Pid == PID).Count();
-            _DBContext.ProjectTabs.Add(new Models.DAO.ProjectTab() { Pid = PID, Tid = tabCount + 1, Name = TabName });
+            var tabCount = _DBContext.ProjectTabs.Where(t => t.Pid == PID).OrderByDescending(p => p.Tid);
+            int TID = tabCount.First().Tid+1;
+            _DBContext.ProjectTabs.Add(new Models.DAO.ProjectTab() { Pid = PID, Tid = TID, Name = TabName });
 
             _DBContext.SaveChanges();
-            return RedirectToAction($"ViewProject", new { ppid = PID, ptid = tabCount+1 });
+            return RedirectToAction($"ViewProject", new { ppid = PID, ptid = TID });
         }
 
         [HttpGet]
@@ -232,8 +234,65 @@ namespace TPI_ProjectPresenter.Controllers
             return RedirectToAction("ViewProject", new { pPID = pData.PID, pTID = pData.TID });
         }
 
+        [HttpGet]
+        public IActionResult EditItem(int pPID, int pTID, int pSID, int pIID)
+        {
+            var item = _DBContext.ContentItems.Find(pPID, pTID, pSID, pIID);
+            if (item == null) return NotFound();
+
+            var cim = _DBContext.ContentSingleImages.ToList();
+            var csc = _DBContext.ContentSingleComparisons.ToList();
+            var cinf = _DBContext.ComparisonItemInfos.ToList();
+
+            var aux = ContentItemDataAdapter.DataObjectFromItemRow(item);
+            
+            
+            ViewBag.ItemType = item.Type;
+            return View(aux);
+        }
+
+        [HttpPost]
+        public IActionResult EditItem(ViewItemData pData)
+        {
+            if (pData.ItemData.IID == 0)
+            {
+                pData.ItemData.IID = Int32.Parse(Request.Form["ItemData.IID"]);
+            }
+            var item = _DBContext.ContentItems.Find(pData.PID, pData.TID, pData.SID, pData.ItemData.IID);
+            if (item == null) return NotFound();
+            item.Title = pData.ItemData.ItemTitle;
+            item.Text = pData.ItemData.ItemText;
+            if (pData.ImgFile != null && pData.ItemData.ItemType == "SingleImage")
+            {
+                var cim = _DBContext.ContentSingleImages.ToList();
+                var imgAux = item.ContentSingleImages.FirstOrDefault();
+                imgAux.ImageRef = UploadImage(pData.ImgFile);
+            }
+            if (pData.ItemData.ItemType == "SingleComparison")
+            {
+                var itemlcomp = item.ContentSingleComparisons.Where(c => c.Lr == "l").FirstOrDefault();
+                var itemrcomp = item.ContentSingleComparisons.Where(c => c.Lr == "r").FirstOrDefault();
+
+                itemlcomp.Title = pData.SingleComparisonData.LeftItem.ItemTitle;
+                itemlcomp.Detail = pData.SingleComparisonData.LeftItem.ItemDetail;
+                //itemlcomp.ComparisonItemInfos
 
 
+
+                string[] lItemInfo = [Request.Form["LItemInfo-1"], Request.Form["LItemInfo-2"], Request.Form["LItemInfo-3"]];
+                string[] rItemInfo = [Request.Form["RItemInfo-1"], Request.Form["RItemInfo-2"], Request.Form["RItemInfo-3"]];
+                pData.SingleComparisonData.LeftItem.SetInfoFromArray(lItemInfo);
+                pData.SingleComparisonData.RightItem.SetInfoFromArray(rItemInfo);
+
+                var newcomps = ContentItemDataAdapter.ComparisonRowFromDataObject(pData.SingleComparisonData);
+                foreach (var comp in newcomps)
+                {
+                    //var existingComp = item.ContentSingleComparisons.u
+                }
+            }
+            _DBContext.SaveChanges();
+            return RedirectToAction("ViewProject", new { pPID = pData.PID, pTID = pData.TID });
+        }
 
 
 
@@ -317,7 +376,7 @@ namespace TPI_ProjectPresenter.Controllers
 
 
         [HttpGet]
-        public IActionResult ViewProject(int pPID=1, int pTID=1)
+        public IActionResult ViewProject(int? pTID, int pPID=1)
 		{
             //Querys que deberian ser suficientes pero no
             var prj = _DBContext.Projects.Find([pPID]);
@@ -343,7 +402,7 @@ namespace TPI_ProjectPresenter.Controllers
 
             //var qry = _DBContext.ContentSections.FromSql($"select * from ContentSection where PID={1} AND TID={1}").ToList();
 
-            ViewBag.activeTab = pTID;
+            if (pTID != null) ViewBag.activeTab = pTID;
             return View(prjObj);
         }
 
